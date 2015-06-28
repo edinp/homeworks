@@ -15,7 +15,8 @@ public class Task01 extends JFrame {
 	/*
 	 * Array of 10 buttons
 	 */
-	private JButton[] buttons = new JButton[10];
+	private static final JButton[] BUTTONS = new JButton[10];
+	private static final int MAX_CLICKS = 3;
 	
 	int count = 0;
 	String str = "";
@@ -31,9 +32,9 @@ public class Task01 extends JFrame {
 		setLayout(new GridLayout(10,1));
 		Action listen = new Action();
 		for (int i = 0; i < 10; i++) {
-			buttons[i] = new JButton("" + i);
-			add(buttons[i]);
-			buttons[i].addActionListener(listen);
+			BUTTONS[i] = new JButton("" + i);
+			add(BUTTONS[i]);
+			BUTTONS[i].addActionListener(listen);
 		}
 		
 	}
@@ -52,13 +53,13 @@ public class Task01 extends JFrame {
 		 */
 		public void actionPerformed(ActionEvent e) {
 			
-			for (int i = 0; i < buttons.length; i++) {
-				if (count < 3 && e.getSource() == buttons[i]) {
-					buttons[i].setEnabled(false);
-					str+=buttons[i].getText();
+			for (int i = 0; i < BUTTONS.length; i++) {
+				if (count < MAX_CLICKS && e.getSource() == BUTTONS[i]) {
+					BUTTONS[i].setEnabled(false);
+					str+=BUTTONS[i].getText();
 					count++;
 				}
-				if (count == 3){
+				if (count == MAX_CLICKS){
 					JOptionPane.showMessageDialog(null, "Number is: " + str);
 					System.exit(0);
 				}
