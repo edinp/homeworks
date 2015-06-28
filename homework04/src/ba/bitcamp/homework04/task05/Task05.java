@@ -4,10 +4,15 @@ public class Task05 {
 
 	public static void main(String[] args) {
 
-		System.out.println(getPower(-2,4));
+		System.out.println(getPower(-2,-2));
 		
 	}
 	
+	/**
+	 * Recursive method for calculating the power of base number
+	 * @param a - base number
+	 * @param b - power, or exponent
+	 */
 	public static double getPower(double a, double b) {
 		if(b==2) {
 			return a*a;

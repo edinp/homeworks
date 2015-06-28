@@ -12,10 +12,17 @@ public class Task01 extends JFrame {
 	
 	private static final long serialVersionUID = -191094256336535347L;
 
+	/*
+	 * Array of 10 buttons
+	 */
 	private JButton[] buttons = new JButton[10];
 	
 	int count = 0;
 	String str = "";
+	
+	/*
+	 * Constructor for this JFrame, with GridLayout, and 10 buttons
+	 */
 	public Task01() {
 	
 		setVisible(true);
@@ -31,8 +38,18 @@ public class Task01 extends JFrame {
 		
 	}
 	
+	/*
+	 * 
+	 */
 	public class Action implements ActionListener{
 
+		
+		/*
+		 * When you press three buttons, you get message dialog
+		 * with numbers on these buttons.
+		 * (non-Javadoc)
+		 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+		 */
 		public void actionPerformed(ActionEvent e) {
 			
 			for (int i = 0; i < buttons.length; i++) {

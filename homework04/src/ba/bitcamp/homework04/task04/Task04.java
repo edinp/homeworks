@@ -9,6 +9,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+/*
+ * This JFrame allows you to put manually generated characters,
+ * into the JLabel.
+ */
 public class Task04 extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
@@ -17,10 +21,11 @@ public class Task04 extends JFrame {
 			'g','h','i','j','k','l','m','n','o','p','q','r',
 			's','t','u','v','w','x','y','z'};
 	
-	
-	
 	char[] label = new char[] {'_'};
 	
+	/*
+	 * Simple toString method
+	 */
 	public static String generateLabel(char[] label) {
 		String str = "";
 		for (int i = 0; i < label.length; i++) {
@@ -37,7 +42,9 @@ public class Task04 extends JFrame {
 	private JLabel l1 = new JLabel(generateLabel(label));
 	
 	
-	
+	/*
+	 * Constructor for this JFrame, BorderLayout
+	 */
 	public Task04 () {
 		setVisible(true);
 		setLayout(new BorderLayout());
@@ -61,6 +68,13 @@ public class Task04 extends JFrame {
 		
 	}
 	
+	
+	/*
+	 * Allows to cruise through array of characters, and to
+	 * put generated characters in last position.
+	 * Should allow to put characters in selected position,
+	 * but it doesn't work.
+	 */
 	private class Action implements ActionListener {
 
 		@Override
@@ -109,6 +123,9 @@ public class Task04 extends JFrame {
 		
 	}
 	
+	/*
+	 * Generates random characters from Alphabet
+	 */
 	public static char generate(char[] alphabet) {
 		return alphabet[(int)(Math.random()*alphabet.length)];
 	}

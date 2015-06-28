@@ -8,6 +8,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+/*
+ * Randomise first and last name, clicking on left and right buttons
+ */
 public class Task02 extends JFrame {
 
 	private static final long serialVersionUID = -246335548710419729L;
@@ -15,7 +18,9 @@ public class Task02 extends JFrame {
 	private JButton b2 = new JButton("Last name");
 	private JLabel label = new JLabel("ime i prezime");
 	
-	
+	/*
+	 * Constructor for this JFrame, with BorderLayout
+	 */
 	public Task02(){
 		setLayout(new BorderLayout());
 		setVisible(true);
@@ -54,6 +59,9 @@ public class Task02 extends JFrame {
 
 	}
 	
+	/*
+	 * Class as structure of random names
+	 */
 	private static class Names {
 		private static String[] names = new String[] {
 			"edin",
@@ -74,6 +82,9 @@ public class Task02 extends JFrame {
 		}
 	}
 	
+	/*
+	 * Class as structure of random last names
+	 */
 	private static class LastNames {
 		private static String[] lastNames = new String[] {
 				"pilavdzic",
@@ -93,6 +104,9 @@ public class Task02 extends JFrame {
 		
 	}
 	
+	/*
+	 * Generates random strings from String arrays.
+	 */
 	public static String generateName(String[] names) {
 		return names[(int)(Math.random()*names.length)].toString();
 	}

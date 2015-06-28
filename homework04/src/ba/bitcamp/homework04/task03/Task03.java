@@ -9,12 +9,20 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+/*
+ * Creates array of numbers, one from each columns,
+ * by clicking buttons in Border Layout, 
+ * in 2 rows and 5 columns.
+ */
 public class Task03 extends JFrame {
 
 	private static final long serialVersionUID = 4917844607529053614L;
 	JButton[] buttons = new JButton[10];
 	String[] array = new String[5];
 	
+	/*
+	 * Constructor for this JFrame, BorderLayout
+	 */
 	public Task03() {
 		setVisible(true);
 		setSize(400,100);
@@ -30,6 +38,9 @@ public class Task03 extends JFrame {
 		}
 	}
 	
+	/*
+	 * Allows to choose only one number from each column
+	 */
 	private class Action implements ActionListener {
 
 		@Override
