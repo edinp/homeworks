@@ -1,0 +1,100 @@
+package ba.bitcamp.homework04.task02;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class Task02 extends JFrame {
+
+	private static final long serialVersionUID = -246335548710419729L;
+	private JButton b1 = new JButton("First name");
+	private JButton b2 = new JButton("Last name");
+	private JLabel label = new JLabel("ime i prezime");
+	
+	
+	public Task02(){
+		setLayout(new BorderLayout());
+		setVisible(true);
+		setSize(400, 200);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		Action listen = new Action();
+		
+		add(b1, BorderLayout.WEST);
+		add(b2, BorderLayout.EAST);
+		add(label, BorderLayout.CENTER);
+		label.setHorizontalAlignment(JLabel.CENTER);
+		
+		b1.addActionListener(listen);
+		b2.addActionListener(listen);
+	}
+	
+	private class Action implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == b1) {
+				label.setText(generateName(Names.getNames()) + " " + LastNames.lastNames[0]);
+			}
+			if (e.getSource() == b2) {
+				label.setText(Names.names[0] + " " + generateName(LastNames.getLastNames()));
+			}
+		}
+	}
+	
+	
+	
+	public static void main(String[] args) {
+		
+		new Task02();
+
+	}
+	
+	private static class Names {
+		private static String[] names = new String[] {
+			"edin",
+			"azra",
+			"omar",
+			"emir",
+			"mersiha",
+			"aida",
+			"leila",
+			"ella",
+			"fahrudin",
+			"lutvo",
+			"rabija"
+		};
+		
+		public static String[] getNames() {
+			return names;
+		}
+	}
+	
+	private static class LastNames {
+		private static String[] lastNames = new String[] {
+				"pilavdzic",
+				"kapetanovic",
+				"somun",
+				"haskovic",
+				"bogicevic",
+				"radanovic",
+				"silajdzic",
+				"stepanov",
+				"berberovic"
+		};
+		
+		public static String[] getLastNames() {
+			return lastNames;
+		}
+		
+	}
+	
+	public static String generateName(String[] names) {
+		return names[(int)(Math.random()*names.length)].toString();
+	}
+
+}
