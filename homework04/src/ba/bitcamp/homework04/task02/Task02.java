@@ -20,6 +20,7 @@ public class Task02 extends JFrame {
 	
 	/*
 	 * Constructor for this JFrame, with BorderLayout
+	 * 
 	 */
 	public Task02(){
 		setLayout(new BorderLayout());
@@ -43,10 +44,10 @@ public class Task02 extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getSource() == b1) {
-				label.setText(generateName(Names.getNames()) + " " + LastNames.lastNames[0]);
+				label.setText(generateName(Names.getNames()) + " " + LastNames.LASTNAMES[0]);
 			}
 			if (e.getSource() == b2) {
-				label.setText(Names.names[0] + " " + generateName(LastNames.getLastNames()));
+				label.setText(Names.NAMES[0] + " " + generateName(LastNames.getLastNames()));
 			}
 		}
 	}
@@ -63,7 +64,7 @@ public class Task02 extends JFrame {
 	 * Class as structure of random names
 	 */
 	private static class Names {
-		private static String[] names = new String[] {
+		private static String[] NAMES = new String[] {
 			"edin",
 			"azra",
 			"omar",
@@ -78,7 +79,7 @@ public class Task02 extends JFrame {
 		};
 		
 		public static String[] getNames() {
-			return names;
+			return NAMES;
 		}
 	}
 	
@@ -86,7 +87,7 @@ public class Task02 extends JFrame {
 	 * Class as structure of random last names
 	 */
 	private static class LastNames {
-		private static String[] lastNames = new String[] {
+		private static String[] LASTNAMES = new String[] {
 				"pilavdzic",
 				"kapetanovic",
 				"somun",
@@ -99,7 +100,11 @@ public class Task02 extends JFrame {
 		};
 		
 		public static String[] getLastNames() {
-			return lastNames;
+			return LASTNAMES;
+		}
+		
+		public void generateName() {
+			LASTNAMES[(int)(Math.random()*LASTNAMES.length)].toString();
 		}
 		
 	}
@@ -108,7 +113,7 @@ public class Task02 extends JFrame {
 	 * Generates random strings from String arrays.
 	 */
 	public static String generateName(String[] names) {
-		return names[(int)(Math.random()*names.length)].toString();
+		return names[(int)(Math.random()*names.length)];
 	}
 
 }
