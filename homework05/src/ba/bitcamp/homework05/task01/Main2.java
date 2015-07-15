@@ -1,20 +1,32 @@
 package ba.bitcamp.homework05.task01;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class Main2 extends JFrame {
-	
+
+	private static final long serialVersionUID = -33033067947344312L;
 	private final int A = 30;
 	private JLabel[][] field = new JLabel[A][A];
 	private String point = ".";
@@ -22,19 +34,45 @@ public class Main2 extends JFrame {
 	private String hash = "#";
 	private int x = 0;
 	private int y = 1;
-	private Color player = Color.BLACK;
-	private Color path = Color.ORANGE;
-	private Color background = Color.RED;
-	private long start;
-	private long stop;
-	private int dimensions = A*20;
-	
+	private int rgb = 255;
+	private Color player = Color.RED;
+	private Color path = new Color(rgb, rgb, rgb);
+	private Color background = new Color(0, 0, 0);
+	private int dimensions = A * 20;
+	private int seconds = 0;
+	private int minutes = 0;
+	private int moves = 0;
+	private Timer timer;
+	private JMenuBar bar = new JMenuBar();
+	private JMenu menu = new JMenu("File");
+	private JMenuItem exit = new JMenuItem("Exit");
+	private JMenuItem newgame = new JMenuItem("New Game");
+	private JMenu menu2 = new JMenu("Help");
+	private JMenuItem commands = new JMenuItem("Commands");
+	private JMenuItem about = new JMenuItem("About");
+	private JMenuItem git = new JMenuItem("GIT");
+	private JDialog commands1 = new JDialog();
+	private JDialog about1 = new JDialog();
+
 	public Main2() {
+		setTitle("Maze Runner");
 		addKeyListener(new Key());
-		setLayout(new GridLayout(A,A));
-		start = System.currentTimeMillis();
-		
-		
+		setLayout(new GridLayout(A, A));
+
+		setJMenuBar(bar);
+		bar.add(menu);
+		bar.add(menu2);
+		menu.add(newgame);
+		menu.add(exit);
+		menu2.add(git);
+		menu2.add(commands);
+		menu2.add(about);
+		newgame.addActionListener(new Action());
+		exit.addActionListener(new Action());
+		commands.addActionListener(new Action());
+		git.addActionListener(new Action());
+		about.addActionListener(new Action());
+
 		for (int i = 0; i < field.length; i++) {
 			for (int j = 0; j < field[i].length; j++) {
 				field[i][j] = new JLabel(point);
@@ -43,14 +81,14 @@ public class Main2 extends JFrame {
 				field[i][j].setHorizontalAlignment(JLabel.CENTER);
 			}
 		}
-		
+
 		for (int i = 0; i < field.length; i++) {
 			for (int j = 0; j < field[i].length; j++) {
 				field[i][j].setText(hash);
 				field[i][j].setForeground(background);
 			}
 		}
-		
+
 		field[1][1].setText(point);
 		field[2][1].setText(point);
 		field[3][1].setText(point);
@@ -432,8 +470,7 @@ public class Main2 extends JFrame {
 		field[9][23].setText(point);
 		field[1][28].setText(point);
 		field[2][28].setText(point);
-		
-		
+
 		for (int i = 0; i < field.length; i++) {
 			for (int j = 0; j < field[i].length; j++) {
 				if (field[i][j].getText().equals(hash)) {
@@ -441,7 +478,7 @@ public class Main2 extends JFrame {
 				}
 			}
 		}
-		
+
 		for (int i = 0; i < field.length; i++) {
 			for (int j = 0; j < field[i].length; j++) {
 				if (field[i][j].getText().equals(point)) {
@@ -450,21 +487,139 @@ public class Main2 extends JFrame {
 				}
 			}
 		}
-		
+
 		field[x][y].setText(plus);
 		field[x][y].setBackground(player);
 		field[x][y].setForeground(path);
-		field[A-A/2-A/3][A-1].setText(point);
-		field[A-A/2-A/3][A-1].setBackground(path);
-		field[A-A/2-A/3][A-1].setForeground(path);
-		
-		
-		setSize(dimensions,dimensions);
+		field[A - A / 2 - A / 3][A - 1].setText(point);
+		field[A - A / 2 - A / 3][A - 1].setBackground(path);
+		field[A - A / 2 - A / 3][A - 1].setForeground(path);
+
+		for (int i = 0; i < 2; i++) {
+			field[29][i].setForeground(Color.GRAY);
+			field[29][i].setBackground(Color.BLACK);
+			field[29][i].setFont(new Font(Font.MONOSPACED, Font.BOLD, 10));
+		}
+
+		for (int i = 0; i < 1; i++) {
+			field[28][i].setForeground(Color.BLACK);
+			field[28][i].setBackground(Color.GRAY);
+			field[28][i].setFont(new Font(Font.MONOSPACED, Font.PLAIN, 10));
+			field[28][i].setText(Integer.toString(moves));
+		}
+
+		timer = new Timer(1000, new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				field[29][1].setText(Integer.toString(seconds));
+				field[29][0].setText(Integer.toString(minutes));
+				seconds++;
+				path = new Color(rgb, rgb, rgb);
+				for (int i = 0; i < field.length; i++) {
+					for (int j = 0; j < field[i].length; j++) {
+						if (field[i][j].getText().equals(point)) {
+							field[i][j].setForeground(path);
+							field[i][j].setBackground(path);
+						}
+					}
+				}
+				rgb-=7;
+				if (rgb < 0) {
+					rgb = 0;
+				}
+
+				if (seconds == 60) {
+					JOptionPane.showMessageDialog(null, "Are you lost?");
+					seconds = 0;
+					minutes++;
+				}
+			}
+		});
+		timer.start();
+
+		addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				timer.stop();
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				timer.start();
+			}
+		});
+
+		setSize(dimensions, dimensions);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 	}
-	
+
+	private class Action implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource() == exit) {
+				System.exit(0);
+			}
+			if (e.getSource() == newgame) {
+				x = 0;
+				y = 1;
+				seconds = 0;
+				minutes = 0;
+				moves = 0;
+				rgb = 255;
+				path = new Color(rgb, rgb, rgb);
+				for (int i = 0; i < field.length; i++) {
+					for (int j = 0; j < field[i].length; j++) {
+						if (field[i][j].getText().equals(plus) || field[i][j].getText().equals(point)) {
+							field[i][j].setForeground(path);
+							field[i][j].setBackground(path);
+							field[i][j].setText(point);
+							field[0][1].setText(plus);
+							field[0][1].setForeground(path);
+							field[0][1].setBackground(player);
+							field[28][0].setText(Integer.toString(moves));
+							field[29][1].setText(Integer.toString(seconds));
+							field[29][0].setText(Integer.toString(minutes));
+						}
+					}
+				}
+			}
+			if (e.getSource() == commands) {
+				commands1.setSize(300, 200);
+				commands1.setLocationRelativeTo(null);
+				commands1.setLayout(new FlowLayout());
+				commands1
+						.add(new JLabel("Left arrow for left, Right for right"));
+				commands1.add(new JLabel("Up for up, down for down."));
+				commands1.setVisible(true);
+			}
+			if (e.getSource() == about) {
+				about1.setSize(200,200);
+				about1.setLocationRelativeTo(null);
+				about1.setLayout(new FlowLayout());
+				about1.add(new JLabel("Created by Edin Pilavdzic..."));
+				about1.add(new JLabel("To be improved..."));
+				about1.setVisible(true);
+			}
+			
+			if (e.getSource() == git) {
+				try {
+					Desktop.getDesktop().browse(new URI("https://github.com/edinp/homeworks/tree/homework05"));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (URISyntaxException e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		}
+
+	}
+
 	private class Key implements KeyListener {
 
 		@Override
@@ -473,54 +628,69 @@ public class Main2 extends JFrame {
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if (e.getKeyCode() == KeyEvent.VK_RIGHT && y<(A-1) && !field[x][y+1].getText().equals(hash)) {
-				field[x][y+1].setText(plus);
-				field[x][y+1].setBackground(player);
+			if (e.getKeyCode() == KeyEvent.VK_RIGHT && y < (A - 1)
+					&& !field[x][y + 1].getText().equals(hash)) {
+				field[x][y + 1].setText(plus);
+				field[x][y + 1].setBackground(player);
 				field[x][y].setText(point);
 				field[x][y].setBackground(path);
 				y++;
+				moves++;
+				field[28][0].setText(Integer.toString(moves));
 			}
-			if (e.getKeyCode() == KeyEvent.VK_LEFT && y>0 && !field[x][y-1].getText().equals(hash)) {
-				field[x][y-1].setText(plus);
-				field[x][y-1].setBackground(player);
+			if (e.getKeyCode() == KeyEvent.VK_LEFT && y > 0
+					&& !field[x][y - 1].getText().equals(hash)) {
+				field[x][y - 1].setText(plus);
+				field[x][y - 1].setBackground(player);
 				field[x][y].setText(point);
 				field[x][y].setBackground(path);
 				y--;
+				moves++;
+				field[28][0].setText(Integer.toString(moves));
 			}
-			if (e.getKeyCode() == KeyEvent.VK_UP && x>0 && !field[x-1][y].getText().equals(hash)) {
-				field[x-1][y].setText(plus);
-				field[x-1][y].setBackground(player);
+			if (e.getKeyCode() == KeyEvent.VK_UP && x > 0
+					&& !field[x - 1][y].getText().equals(hash)) {
+				field[x - 1][y].setText(plus);
+				field[x - 1][y].setBackground(player);
 				field[x][y].setText(point);
 				field[x][y].setBackground(path);
 				x--;
+				moves++;
+				field[28][0].setText(Integer.toString(moves));
 			}
-			if (e.getKeyCode() == KeyEvent.VK_DOWN && x<(A-1) && !field[x+1][y].getText().equals(hash)) {
-				field[x+1][y].setText(plus);
-				field[x+1][y].setBackground(player);
+			if (e.getKeyCode() == KeyEvent.VK_DOWN && x < (A - 1)
+					&& !field[x + 1][y].getText().equals(hash)) {
+				field[x + 1][y].setText(plus);
+				field[x + 1][y].setBackground(player);
 				field[x][y].setText(point);
 				field[x][y].setBackground(path);
 				x++;
+				moves++;
+				field[28][0].setText(Integer.toString(moves));
 			}
-			
-			if (field[A-A/2-A/3][A-1].getBackground().equals(player)) {
-				stop = System.currentTimeMillis();
-				long time = stop-start;
-				int result = (int)(time/1000);
-				if (result < 40) {
-					JOptionPane.showMessageDialog(null, "Great!! \nTime: " + result + " seconds.");
-				} else if (result > 40 && result < 60) {
-					JOptionPane.showMessageDialog(null, "Not Bad. \nTime: " + result + " seconds.");
-				} else if (result > 60) {
-					JOptionPane.showMessageDialog(null, "Sloooow. \nTime: " + result + " seconds.");
+
+			if (field[A - A / 2 - A / 3][A - 1].getBackground().equals(player)) {
+				timer.stop();
+				String vrijeme = field[29][0].getText() + ":"
+						+ field[29][1].getText();
+				if (seconds < 40) {
+					JOptionPane.showMessageDialog(null, "Great!! \nTime: "
+							+ vrijeme + ".");
+				} else if (seconds > 40 && seconds < 60) {
+					JOptionPane.showMessageDialog(null, "Not Bad. \nTime: "
+							+ vrijeme + ".");
+				} else if (seconds > 59) {
+					JOptionPane.showMessageDialog(null, "Sloooow. \nTime: "
+							+ vrijeme + ".");
 				}
 			}
+
 		}
 
 		@Override
 		public void keyReleased(KeyEvent e) {
 		}
 	}
-	
 
 	public static void main(String[] args) {
 		new Main2();
