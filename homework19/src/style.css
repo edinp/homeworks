@@ -1,0 +1,40 @@
+body {
+	display: flex;
+}
+
+img {
+	width: 200px;
+	height: 200px;
+}
+
+#left {
+	background-color: maroon;
+	display: block;
+	padding: 5px;
+}
+
+a {
+	display: block;
+	color: white;
+	text-decoration: none;
+}
+
+a:visited {
+	color: white;
+}
+
+a:hover {
+	color: yellow;
+	text-decoration: underline;
+}
+
+.titles {
+	color: white;
+	font-style: italic;
+	text-decoration: underline;
+}
+
+h1 {
+	text-align: center;
+	background-color: red;
+}
